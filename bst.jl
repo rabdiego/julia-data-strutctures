@@ -50,8 +50,8 @@ function treeMinimum(T::BinarySearchTree)::Union{Node, Nothing}
         while !isnothing(aux.left)
             aux = aux.left
         end
-        return aux
     end
+    return aux
 end
 
 function nextNode(N::Node)::Union{Node, Nothing}
