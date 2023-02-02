@@ -14,7 +14,7 @@ function newTree()::BinarySearchTree
 end
 
 function insert(T::BinarySearchTree, key::Union{Int64, Float64})::BinarySearchTree
-    aux = Node(key, nothing, nothing, nothing)
+    aux::Node = Node(key, nothing, nothing, nothing)
 
     if isnothing(T.root)
         T.root = aux
@@ -44,7 +44,7 @@ end
 
 function treeMinimum(T::BinarySearchTree)::Union{Node, Nothing}
     if isnothing(T.root)
-        aux = nothing
+        aux::Union{Node, Nothing} = nothing
     else
         aux = T.root
         while !isnothing(aux.left)
@@ -55,14 +55,14 @@ function treeMinimum(T::BinarySearchTree)::Union{Node, Nothing}
 end
 
 function nextNode(N::Node)::Union{Node, Nothing}
-    aux = nothing
+    aux::Union{Node, Nothing} = nothing
     if !isnothing(N.right)
-        auxTree = BinarySearchTree(N.right)
+        auxTree::BinarySearchTree = BinarySearchTree(N.right)
         aux = treeMinimum(auxTree)
     else
         if !isnothing(N.parent)
-            x = N
-            y = N.parent
+            x::Node = N
+            y::Union{Node, Nothing} = N.parent
             while y !== nothing && y.left != x
                 y = y.parent
                 x = x.parent
@@ -87,10 +87,51 @@ function printTree(T::Union{BinarySearchTree, Nothing})
     end
 end
 
-t = newTree()
-t = insert(t, 3)
-t = insert(t, 5)
-t = insert(t, 2)
-printTree(t)
+function treeIndex(T::Union{BinarySearchTree, Nothing}, index::Int64)::Union{Node, Nothing}
+    aux::Union{Node, Nothing} = treeMinimum(T)
+    if !isnothing(aux)
+        i::Int64 = 1
+        while aux !== nothing && index != i
+            aux = nextNode(aux)
+            i += 1
+        end
+    end
+    return aux
+end
 
+function transplant(T::BinarySearchTree, u::Union{Node, Nothing}, v::Union{Node, Nothing})::BinarySearchTree
+    if isnothing(u.parent)
+        T.root = v
+    elseif u == u.parent.left
+        u.parent.left = v
+    else
+        u.parent.right = v
+    end
 
+    if !isnothing(v)
+        v.parent = u.parent
+    end
+    return T
+end
+
+function remove(T::Union{BinarySearchTree, Nothing}, index::Int64)::Union{BinarySearchTree, Nothing}
+    z::Union{Node, Nothing} = treeIndex(T, index)
+    if isnothing(z)
+        println("Overflow")
+    else
+        if isnothing(z.left)
+            T = transplant(T, z, z.right)
+        elseif isnothing(z.right)
+            T = transplant(T, z, z.left)
+        else
+            y::Union{Node, Nothing} = nextNode(z)
+            T = transplant(T, y, y.right)
+            y.left = z.left
+            z.left.parent = y
+            y.right = z.right
+            z.right.parent = y
+            T = transplant(T, z, y)
+        end
+    end
+    return T
+end

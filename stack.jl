@@ -26,7 +26,7 @@ function printStack(stack::Union{Stack, Nothing})
 end
 
 function push(stack::Union{Stack, Nothing}, key::Union{Int64, Float64})::Stack
-    aux = Node(key, stack.top)
+    aux::Node = Node(key, stack.top)
     stack.top = aux
     return stack
 end
