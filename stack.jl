@@ -39,10 +39,3 @@ function pop(stack::Union{Stack, Nothing})::Stack
     end
     return stack
 end
-
-s = newStack()
-s = push(s, 4)
-s = push(s, 5.0)
-s = push(s, 7.3)
-s = pop(s)
-printStack(s)
