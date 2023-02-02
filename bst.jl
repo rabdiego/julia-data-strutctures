@@ -42,11 +42,21 @@ function insert(T::BinarySearchTree, key::Union{Int64, Float64})::BinarySearchTr
     return T
 end
 
-function treeMinimum(T::BinarySearchTree)
-
+function treeMinimum(T::BinarySearchTree)::Node
+    if isnothing(T.root)
+        println("Empty tree")
+    else
+        aux = T.root
+        while !isnothing(aux.left)
+            aux = aux.left
+        end
+        return aux
+    end
+end
 
 t = newTree()
 t = insert(t, 3)
 t = insert(t, 5)
-println("$(t.root.right.parent.key)")
+t = insert(t, 2)
+println("$(treeMinimum(t))")
 
