@@ -15,13 +15,11 @@ end
 
 function insert(T::BinarySearchTree, key::Union{Int64, Float64})::BinarySearchTree
     aux::Node = Node(key, nothing, nothing, nothing)
-
     if isnothing(T.root)
         T.root = aux
     else
         x::Union{Node, Nothing} = T.root
         y::Union{Node, Nothing} = nothing
-
         while !isnothing(x)
             y = x
             if key > x.key
@@ -30,7 +28,6 @@ function insert(T::BinarySearchTree, key::Union{Int64, Float64})::BinarySearchTr
                 x = x.left
             end
         end
-
         aux.parent = y
         if key > y.key
             y.right = aux
@@ -38,7 +35,6 @@ function insert(T::BinarySearchTree, key::Union{Int64, Float64})::BinarySearchTr
             y.left = aux
         end
     end
-
     return T
 end
 
